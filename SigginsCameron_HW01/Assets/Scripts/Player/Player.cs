@@ -9,11 +9,15 @@ public class Player : MonoBehaviour
     //TODO offload health into its own script (Health.cs)
     [SerializeField] int _maxHealth = 3;
     int _currentHealth;
+    [SerializeField] ParticleSystem _killParticles;
+    [SerializeField] AudioClip _killSound;
 
     public int _totalTreasure;
     [SerializeField] Text _treasureCount;
 
     BallMotor _ballMotor;
+
+    public bool _invincible;
 
     private void Awake()
     {
@@ -24,6 +28,7 @@ public class Player : MonoBehaviour
     {
         _currentHealth = _maxHealth;
         _totalTreasure = 0;
+        _invincible = false;
     }
 
     private void FixedUpdate()
@@ -59,17 +64,30 @@ public class Player : MonoBehaviour
     {
         _currentHealth -= amount;
         Debug.Log("Player's health: " + _currentHealth);
-        if(_currentHealth <= 0)
+        if (_currentHealth <= 0)
         {
             Kill();
         }
-
     }
 
     public void Kill()
     {
         gameObject.SetActive(false);
-        // TODO add particles
-        // TODO play sound
+        KillFeedback();
+    }
+
+    private void KillFeedback()
+    {
+        //particles
+        if (_killParticles != null)
+        {
+            _killParticles = Instantiate(_killParticles, transform.position, Quaternion.identity);
+        }
+
+        //audio TODO-consider Object Pooling
+        if (_killSound != null)
+        {
+            AudioHelper.PlayClip2D(_killSound, 1f);
+        }
     }
 }

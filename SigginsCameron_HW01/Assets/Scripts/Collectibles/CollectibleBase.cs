@@ -39,7 +39,7 @@ public abstract class CollectibleBase : MonoBehaviour
         if(player != null)
         {
             Collect(player);
-            //spawn particles and sfc because we need to diable object
+            //spawn particles and sfc because we need to disable object
             Feedback();
 
             gameObject.SetActive(false);
